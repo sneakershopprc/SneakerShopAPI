@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SneakerShopAPI.Models;
+using SneakerShopAPI.Repositories;
 
 namespace SneakerShopAPI.Controllers
 {
@@ -12,19 +13,18 @@ namespace SneakerShopAPI.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
-        private readonly SneakerShopContext context;
+        private readonly AuthenticationRepository repository;
 
-        public AuthenticationController(SneakerShopContext _context)
+        public AuthenticationController(AuthenticationRepository repository)
         {
-            context = _context;
+            this.repository = repository;
         }
 
         // GET: api/Authentication
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            Brand b = context.Brand.Find("1");
-            return new string[] { b.BrandNm };
+            return new string[] { repository.Get() };
         }
 
         // GET: api/Authentication/5
