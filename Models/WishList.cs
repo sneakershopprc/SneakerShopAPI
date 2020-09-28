@@ -15,6 +15,6 @@ namespace SneakerShopAPI.Models
         public DateTime UpdDatetime { get; set; }
 
         public virtual Product Product { get; set; }
-        public virtual Users UsernameNavigation { get; set; }
+        public virtual Account UsernameNavigation { get; set; }
     }
 }

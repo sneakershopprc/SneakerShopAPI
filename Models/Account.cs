@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace SneakerShopAPI.Models
 {
-    public partial class Users
+    public partial class Account
     {
-        public Users()
+        public Account()
         {
-            Orders = new HashSet<Orders>();
+            Order = new HashSet<Order>();
             ShippingAddress = new HashSet<ShippingAddress>();
             WishList = new HashSet<WishList>();
         }
@@ -19,13 +19,13 @@ namespace SneakerShopAPI.Models
         public string Email { get; set; }
         public string Photo { get; set; }
         public string Role { get; set; }
-        public bool DelFlg { get; set; }
+        public bool? DelFlg { get; set; }
         public string InsBy { get; set; }
-        public DateTime InsDatetime { get; set; }
+        public DateTime? InsDatetime { get; set; }
         public string UpdBy { get; set; }
-        public DateTime UpdDatetime { get; set; }
+        public DateTime? UpdDatetime { get; set; }
 
-        public virtual ICollection<Orders> Orders { get; set; }
+        public virtual ICollection<Order> Order { get; set; }
         public virtual ICollection<ShippingAddress> ShippingAddress { get; set; }
         public virtual ICollection<WishList> WishList { get; set; }
     }

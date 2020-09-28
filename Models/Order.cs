@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace SneakerShopAPI.Models
 {
-    public partial class Orders
+    public partial class Order
     {
-        public Orders()
+        public Order()
         {
             OrderDetail = new HashSet<OrderDetail>();
         }
@@ -21,7 +21,7 @@ namespace SneakerShopAPI.Models
         public string UpdBy { get; set; }
         public DateTime UpdDatetime { get; set; }
 
-        public virtual Users UsernameNavigation { get; set; }
+        public virtual Account UsernameNavigation { get; set; }
         public virtual ICollection<OrderDetail> OrderDetail { get; set; }
     }
 }

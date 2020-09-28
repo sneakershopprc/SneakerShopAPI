@@ -12,6 +12,6 @@ namespace SneakerShopAPI.Models
         public int Quantity { get; set; }
         public double Discount { get; set; }
 
-        public virtual Orders Order { get; set; }
+        public virtual Order Order { get; set; }
     }
 }

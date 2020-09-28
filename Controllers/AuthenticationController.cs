@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SneakerShopAPI.Models;
+//using SneakerShopAPI.Models;
 using SneakerShopAPI.Repositories;
+using SneakerShopAPI.ViewModels;
 
 namespace SneakerShopAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
+    [AllowAnonymous]
     public class AuthenticationController : ControllerBase
     {
         private readonly AuthenticationRepository repository;
@@ -20,36 +25,43 @@ namespace SneakerShopAPI.Controllers
             this.repository = repository;
         }
 
-        // GET: api/Authentication
-        [HttpGet]
-        public IEnumerable<string> Get()
+        //POST: /user
+        [HttpPost("user")]
+        public ActionResult Register([FromBody] AccountVModel user)
         {
-            return new string[] { repository.Get() };
+            if ((user?.Username ?? "").Length < 6 || (user?.Password ?? "").Length < 6)
+                return BadRequest("Username and Password must be more than 6 characters");
+
+            try
+            {
+                return Ok(repository.SignUp(user));
+            }
+            catch (Exception ex)
+            {
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("duplicate"))
+                {
+                    return BadRequest($"Username {user.Username} is existed!");
+                }
+                throw ex;
+            }
         }
 
-        // GET: api/Authentication/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpPost("login")]
+        public ActionResult Login([FromBody] AccountVModel user)
         {
-            return "value";
-        }
+            if ((user?.Username ?? "").Length < 6 || (user?.Password ?? "").Length < 6)
+            {
+                return BadRequest("Username or Password is incorrect");
+            }
 
-        // POST: api/Authentication
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+            AccountVModel vmodel = repository.LogIn(user);
 
-        // PUT: api/Authentication/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+            if (vmodel == null)
+            {
+                return BadRequest("Username or Password is incorrect");
+            }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return Ok(vmodel);
         }
     }
 }
