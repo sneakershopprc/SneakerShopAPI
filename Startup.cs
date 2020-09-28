@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -33,7 +34,13 @@ namespace SneakerShopAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             services.AddScoped<AuthenticationRepository>();
+            services.AddScoped<BrandRepository>();
+            services.AddScoped<ProductRepository>();
+            services.AddScoped<ProductDetailRepository>();
+            services.AddScoped<PhotoProductRepository>();
 
             services.AddCors(options =>
             {
