@@ -21,6 +21,7 @@ namespace SneakerShopAPI.Models
         public virtual DbSet<OrderDetail> OrderDetail { get; set; }
         public virtual DbSet<PhotoProduct> PhotoProduct { get; set; }
         public virtual DbSet<Product> Product { get; set; }
+        public virtual DbSet<ProductDetail> ProductDetail { get; set; }
         public virtual DbSet<ShippingAddress> ShippingAddress { get; set; }
         public virtual DbSet<WishList> WishList { get; set; }
 
@@ -28,6 +29,7 @@ namespace SneakerShopAPI.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
+                optionsBuilder.UseSqlServer("Server=SE130084;Database=SneakerShop;uid=sa;password=Sonheo123");
             }
         }
 
@@ -38,164 +40,61 @@ namespace SneakerShopAPI.Models
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.HasKey(e => e.Username)
-                    .HasName("PK__Users__F3DBC57395F98C90");
+                    .HasName("PK__Account__F3DBC573FE525B58");
 
                 entity.Property(e => e.Username)
-                    .HasColumnName("username")
-                    .HasMaxLength(50)
                     .IsUnicode(false)
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.DelFlg)
-                    .HasColumnName("delFlg")
-                    .HasDefaultValueSql("((0))");
+                entity.Property(e => e.DelFlg).HasDefaultValueSql("((0))");
 
-                entity.Property(e => e.Email)
-                    .HasColumnName("email")
-                    .HasMaxLength(320)
-                    .IsUnicode(false);
+                entity.Property(e => e.Email).IsUnicode(false);
 
-                entity.Property(e => e.Fullname)
-                    .HasColumnName("fullname")
-                    .HasMaxLength(200);
+                entity.Property(e => e.InsBy).IsUnicode(false);
 
-                entity.Property(e => e.InsBy)
-                    .HasColumnName("insBy")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.InsDatetime).HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.InsDatetime)
-                    .HasColumnName("insDatetime")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.Photo).IsUnicode(false);
 
-                entity.Property(e => e.PasswordHash).HasColumnName("passwordHash");
+                entity.Property(e => e.UpdBy).IsUnicode(false);
 
-                entity.Property(e => e.PasswordSalt).HasColumnName("passwordSalt");
-
-                entity.Property(e => e.Photo)
-                    .HasColumnName("photo")
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Role)
-                    .HasColumnName("role")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.UpdBy)
-                    .HasColumnName("updBy")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpdDatetime)
-                    .HasColumnName("updDatetime")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.UpdDatetime).HasDefaultValueSql("(getdate())");
             });
 
             modelBuilder.Entity<Brand>(entity =>
             {
                 entity.Property(e => e.BrandId)
-                    .HasColumnName("brandId")
-                    .HasMaxLength(8)
                     .IsUnicode(false)
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.BrandNm)
-                    .IsRequired()
-                    .HasColumnName("brandNm")
-                    .HasMaxLength(200);
+                entity.Property(e => e.InsBy).IsUnicode(false);
 
-                entity.Property(e => e.DelFlg).HasColumnName("delFlg");
+                entity.Property(e => e.InsDatetime).HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Description)
-                    .HasColumnName("description")
-                    .HasMaxLength(500);
+                entity.Property(e => e.Photo).IsUnicode(false);
 
-                entity.Property(e => e.InsBy)
-                    .IsRequired()
-                    .HasColumnName("insBy")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.UpdBy).IsUnicode(false);
 
-                entity.Property(e => e.InsDatetime)
-                    .HasColumnName("insDatetime")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Photo)
-                    .IsRequired()
-                    .HasColumnName("photo")
-                    .HasMaxLength(300)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpdBy)
-                    .IsRequired()
-                    .HasColumnName("updBy")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpdDatetime)
-                    .HasColumnName("updDatetime")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.UpdDatetime).HasDefaultValueSql("(getdate())");
             });
 
             modelBuilder.Entity<Order>(entity =>
             {
                 entity.Property(e => e.OrderId)
-                    .HasColumnName("orderId")
-                    .HasMaxLength(8)
                     .IsUnicode(false)
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.InsBy)
-                    .IsRequired()
-                    .HasColumnName("insBy")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.InsBy).IsUnicode(false);
 
-                entity.Property(e => e.InsDatetime)
-                    .HasColumnName("insDatetime")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.InsDatetime).HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Phonenumber)
-                    .IsRequired()
-                    .HasColumnName("phonenumber")
-                    .HasMaxLength(10)
-                    .IsUnicode(false);
+                entity.Property(e => e.Phonenumber).IsUnicode(false);
 
-                entity.Property(e => e.ReceiverNm)
-                    .IsRequired()
-                    .HasColumnName("receiverNm")
-                    .HasMaxLength(200);
+                entity.Property(e => e.UpdBy).IsUnicode(false);
 
-                entity.Property(e => e.ShippingAddress)
-                    .IsRequired()
-                    .HasColumnName("shippingAddress")
-                    .HasMaxLength(500);
+                entity.Property(e => e.UpdDatetime).HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasColumnName("status")
-                    .HasMaxLength(50);
-
-                entity.Property(e => e.UpdBy)
-                    .IsRequired()
-                    .HasColumnName("updBy")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpdDatetime)
-                    .HasColumnName("updDatetime")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Username)
-                    .IsRequired()
-                    .HasColumnName("username")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.Username).IsUnicode(false);
 
                 entity.HasOne(d => d.UsernameNavigation)
                     .WithMany(p => p.Order)
@@ -206,25 +105,7 @@ namespace SneakerShopAPI.Models
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Discount).HasColumnName("discount");
-
-                entity.Property(e => e.OrderId)
-                    .IsRequired()
-                    .HasColumnName("orderId")
-                    .HasMaxLength(8)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.Price)
-                    .HasColumnName("price")
-                    .HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.Product)
-                    .IsRequired()
-                    .HasColumnName("product");
-
-                entity.Property(e => e.Quantity).HasColumnName("quantity");
+                entity.Property(e => e.OrderId).IsUnicode(false);
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetail)
@@ -235,40 +116,17 @@ namespace SneakerShopAPI.Models
 
             modelBuilder.Entity<PhotoProduct>(entity =>
             {
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.InsBy).IsUnicode(false);
 
-                entity.Property(e => e.DelFlg).HasColumnName("delFlg");
+                entity.Property(e => e.InsDatetime).HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.InsBy)
-                    .IsRequired()
-                    .HasColumnName("insBy")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.Photo).IsUnicode(false);
 
-                entity.Property(e => e.InsDatetime)
-                    .HasColumnName("insDatetime")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.ProductId).IsUnicode(false);
 
-                entity.Property(e => e.Photo)
-                    .HasColumnName("photo")
-                    .IsUnicode(false);
+                entity.Property(e => e.UpdBy).IsUnicode(false);
 
-                entity.Property(e => e.ProductId)
-                    .HasColumnName("productId")
-                    .HasMaxLength(8)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpdBy)
-                    .IsRequired()
-                    .HasColumnName("updBy")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpdDatetime)
-                    .HasColumnName("updDatetime")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.UpdDatetime).HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.PhotoProduct)
@@ -279,66 +137,20 @@ namespace SneakerShopAPI.Models
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.Property(e => e.ProductId)
-                    .HasColumnName("productId")
-                    .HasMaxLength(8)
                     .IsUnicode(false)
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.BrandId)
-                    .HasColumnName("brandId")
-                    .HasMaxLength(8)
-                    .IsUnicode(false);
+                entity.Property(e => e.BrandId).IsUnicode(false);
 
-                entity.Property(e => e.Color)
-                    .IsRequired()
-                    .HasColumnName("color")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.Color).IsUnicode(false);
 
-                entity.Property(e => e.DelFlg).HasColumnName("delFlg");
+                entity.Property(e => e.InsBy).IsUnicode(false);
 
-                entity.Property(e => e.Description)
-                    .HasColumnName("description")
-                    .HasMaxLength(500);
+                entity.Property(e => e.InsDatetime).HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.Discount).HasColumnName("discount");
+                entity.Property(e => e.UpdBy).IsUnicode(false);
 
-                entity.Property(e => e.InsBy)
-                    .IsRequired()
-                    .HasColumnName("insBy")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.InsDatetime)
-                    .HasColumnName("insDatetime")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Price)
-                    .HasColumnName("price")
-                    .HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.ProductNm)
-                    .IsRequired()
-                    .HasColumnName("productNm")
-                    .HasMaxLength(200);
-
-                entity.Property(e => e.Quantity).HasColumnName("quantity");
-
-                entity.Property(e => e.Size)
-                    .HasColumnName("size")
-                    .HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.UpdBy)
-                    .IsRequired()
-                    .HasColumnName("updBy")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpdDatetime)
-                    .HasColumnName("updDatetime")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.UpdDatetime).HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.Brand)
                     .WithMany(p => p.Product)
@@ -346,51 +158,29 @@ namespace SneakerShopAPI.Models
                     .HasConstraintName("FK_Product_Brand");
             });
 
+            modelBuilder.Entity<ProductDetail>(entity =>
+            {
+                entity.Property(e => e.ProductId).IsUnicode(false);
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductDetail)
+                    .HasForeignKey(d => d.ProductId)
+                    .HasConstraintName("FK_Product_Detail");
+            });
+
             modelBuilder.Entity<ShippingAddress>(entity =>
             {
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.InsBy).IsUnicode(false);
 
-                entity.Property(e => e.Address)
-                    .IsRequired()
-                    .HasColumnName("address")
-                    .HasMaxLength(500);
+                entity.Property(e => e.InsDatetime).HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.DelFlg).HasColumnName("delFlg");
+                entity.Property(e => e.Phonenumber).IsUnicode(false);
 
-                entity.Property(e => e.InsBy)
-                    .IsRequired()
-                    .HasColumnName("insBy")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.UpdBy).IsUnicode(false);
 
-                entity.Property(e => e.InsDatetime)
-                    .HasColumnName("insDatetime")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.UpdDatetime).HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.IsDefault).HasColumnName("isDefault");
-
-                entity.Property(e => e.Phonenumber)
-                    .HasColumnName("phonenumber")
-                    .HasMaxLength(11)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpdBy)
-                    .IsRequired()
-                    .HasColumnName("updBy")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpdDatetime)
-                    .HasColumnName("updDatetime")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Username)
-                    .IsRequired()
-                    .HasColumnName("username")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.Username).IsUnicode(false);
 
                 entity.HasOne(d => d.UsernameNavigation)
                     .WithMany(p => p.ShippingAddress)
@@ -401,43 +191,17 @@ namespace SneakerShopAPI.Models
 
             modelBuilder.Entity<WishList>(entity =>
             {
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.InsBy).IsUnicode(false);
 
-                entity.Property(e => e.DelFlg).HasColumnName("delFlg");
+                entity.Property(e => e.InsDatetime).HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.InsBy)
-                    .IsRequired()
-                    .HasColumnName("insBy")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.ProductId).IsUnicode(false);
 
-                entity.Property(e => e.InsDatetime)
-                    .HasColumnName("insDatetime")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
+                entity.Property(e => e.UpdBy).IsUnicode(false);
 
-                entity.Property(e => e.ProductId)
-                    .IsRequired()
-                    .HasColumnName("productId")
-                    .HasMaxLength(8)
-                    .IsUnicode(false);
+                entity.Property(e => e.UpdDatetime).HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.UpdBy)
-                    .IsRequired()
-                    .HasColumnName("updBy")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpdDatetime)
-                    .HasColumnName("updDatetime")
-                    .HasColumnType("datetime")
-                    .HasDefaultValueSql("(getdate())");
-
-                entity.Property(e => e.Username)
-                    .IsRequired()
-                    .HasColumnName("username")
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.Property(e => e.Username).IsUnicode(false);
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.WishList)
@@ -449,7 +213,7 @@ namespace SneakerShopAPI.Models
                     .WithMany(p => p.WishList)
                     .HasForeignKey(d => d.Username)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_WishList_Users");
+                    .HasConstraintName("FK_WishList_Account");
             });
         }
     }
