@@ -43,6 +43,8 @@ namespace SneakerShopAPI
             services.AddScoped<PhotoProductRepository>();
             services.AddScoped<ShippingAddressRepository>();
             services.AddScoped<WishListRepository>();
+            services.AddScoped<OrderRepository>();
+            services.AddScoped<OrderDetailRepository>();
 
             services.AddCors(options =>
             {

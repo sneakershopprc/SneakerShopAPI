@@ -18,9 +18,18 @@ namespace ssrcore.AutoMapper
             // Product Mapper
             CreateMap<Product, ProductVModel>();
             CreateMap<ProductVModel, Product>();
+            // ProductDetail Mapper
+            CreateMap<ProductDetail, ProductDetailVModel>();
+            CreateMap<ProductDetailVModel, ProductDetail>();
             // WishList Mapper
             CreateMap<WishList, WishListVModel>();
             CreateMap<WishListVModel, WishList>();
+            // Order Mapper
+            CreateMap<Order, OrderVModel>();
+            CreateMap<OrderVModel, Order>();
+            // OrderDetail Mapper
+            CreateMap<OrderDetail, OrderDetailVModel>();
+            CreateMap<OrderDetailVModel, OrderDetail>();
         }
     }
 }

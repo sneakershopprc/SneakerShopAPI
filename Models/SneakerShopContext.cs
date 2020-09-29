@@ -99,18 +99,18 @@ namespace SneakerShopAPI.Models
                 entity.HasOne(d => d.UsernameNavigation)
                     .WithMany(p => p.Order)
                     .HasForeignKey(d => d.Username)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_User");
             });
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
+                entity.Property(e => e.Discount).HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.OrderId).IsUnicode(false);
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderDetail)
                     .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderDetail_Order");
             });
 

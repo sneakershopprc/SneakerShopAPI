@@ -9,19 +9,17 @@ namespace SneakerShopAPI.Models
     {
         [Column("id")]
         public int Id { get; set; }
-        [Required]
         [Column("orderId")]
         [StringLength(8)]
         public string OrderId { get; set; }
-        [Required]
         [Column("product")]
         public string Product { get; set; }
         [Column("price", TypeName = "decimal(18, 0)")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
         [Column("quantity")]
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
         [Column("discount")]
-        public double Discount { get; set; }
+        public double? Discount { get; set; }
 
         [ForeignKey("OrderId")]
         [InverseProperty("OrderDetail")]

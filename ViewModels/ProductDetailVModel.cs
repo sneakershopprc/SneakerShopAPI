@@ -11,6 +11,10 @@ namespace SneakerShopAPI.ViewModels
         public decimal Size { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
+        public string ProductNm { get; set; }
+        public string Color { get; set; }
+        public double Discount { get; set; }
+        public string BrandNm { get; set; }
 
     }
 }
