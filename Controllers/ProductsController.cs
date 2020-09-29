@@ -72,6 +72,11 @@ namespace SneakerShopAPI.Controllers
         [HttpDelete("{productId}")]
         public IActionResult Delete(string productId, [FromQuery] string implementer)
         {
+            var product = productRepository.Get(productId);
+            if (product == null)
+            {
+                return NotFound();
+            }
             var result = productRepository.Delete(productId, implementer);
             if (result)
             {

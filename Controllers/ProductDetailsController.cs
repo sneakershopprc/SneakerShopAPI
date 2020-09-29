@@ -21,9 +21,9 @@ namespace SneakerShopAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllProductDetail([FromQuery] string productId, [FromQuery] int isStill)
+        public IActionResult GetAllProductDetail([FromQuery] string productId)
         {
-            var result = productDetailRepository.GetAll(productId, isStill);
+            var result = productDetailRepository.GetAll(productId);
             return Ok(result);
         }
 
@@ -39,10 +39,10 @@ namespace SneakerShopAPI.Controllers
             return BadRequest();
         }
 
-        [HttpPut]
-        public IActionResult Update([FromBody] ProductDetail model)
+        [HttpPut("{productId}")]
+        public IActionResult Update(string productId, [FromBody] ProductDetail model)
         {
-            var productDetail = productDetailRepository.Get(model.ProductId, model.Size);
+            var productDetail = productDetailRepository.Get(productId, model.Size);
             if (productDetail == null)
             {
                 return NotFound();

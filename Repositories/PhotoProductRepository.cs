@@ -13,12 +13,6 @@ namespace SneakerShopAPI.Repositories
         {
         }
 
-        public PhotoProduct Get(string photo)
-        {
-            PhotoProduct productPhoto = context.PhotoProduct.SingleOrDefault(s => s.Photo == photo);
-            return productPhoto;
-        }
-    
         public List<string> GetAll(string productId)
         {
             var photoList = context.PhotoProduct.Where(d => (d.DelFlg == false)
@@ -28,11 +22,10 @@ namespace SneakerShopAPI.Repositories
         }
 
 
-        public PhotoProduct Create(PhotoProduct productPhoto)
+        public bool Create(PhotoProduct productPhoto)
         {
             context.PhotoProduct.Add(productPhoto);
-            context.SaveChanges();
-            return Get(productPhoto.Photo);
+            return true;
         }
 
         public bool DeleteByProductId(string productId, string implementer)
@@ -44,7 +37,6 @@ namespace SneakerShopAPI.Repositories
                 photoProduct.UpdBy = implementer;
                 photoProduct.UpdDatetime = DateTime.Now;
             }
-            context.SaveChanges();
             return true;
         }
 

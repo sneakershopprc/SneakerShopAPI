@@ -5,12 +5,16 @@ using ssrcore.ViewModels;
 
 namespace ssrcore.AutoMapper
 {
-    public class BrandMapper : Profile
+    public class CommomMapper : Profile
     {
-        public BrandMapper()
+        public CommomMapper()
         {
+            // Brand Mapper
             CreateMap<Brand, BrandVModel>();
             CreateMap<BrandVModel, Brand>();
+            // Product Mapper
+            CreateMap<Product, ProductVModel>();
+            CreateMap<ProductVModel, Product>();
         }
     }
 }

@@ -24,14 +24,13 @@ namespace SneakerShopAPI.Repositories
         }
         public Product Get(string productId)
         {
-            Product product = context.Product.Find(productId);
+            Product product = context.Product.SingleOrDefault(s => s.ProductId == productId && s.DelFlg == false);
             return product;
         }
         public ProductVModel GetToVModel(string productId, int isStill)
         {
-            List<string> photoList = photoProductRepository.GetAll(productId);
-            List<ProductDetail> productDetailList = productDetailRepository.GetAll(productId, isStill);
-
+            //List<string> photoList = photoProductRepository.GetAll(productId);
+            //List<ProductDetail> productDetailList = productDetailRepository.GetAll(productId, isStill);
             var productModel = context.Product.Where(s => s.DelFlg == false && s.ProductId == productId).Select(s => new ProductVModel
             {
                 ProductId = s.ProductId,
@@ -41,8 +40,8 @@ namespace SneakerShopAPI.Repositories
                 BrandId = s.BrandId,
                 BrandNm = s.Brand.BrandNm,
                 Discount = s.Discount,
-                photoList = photoList,
-                productDetailList = productDetailList
+                photoList = s.PhotoProduct.Where(d => d.DelFlg == false).Select(p => p.Photo).ToList(),
+                productDetailList = isStill == 1 ? s.ProductDetail.Where(pd => pd.Quantity > 0).ToList() : s.ProductDetail.ToList()
             }).SingleOrDefault();
             return productModel;
         }
@@ -50,7 +49,10 @@ namespace SneakerShopAPI.Repositories
         public PagedList<ProductVModel> GetAll(SearchProductVModel model)
         {
             var query = context.Product.Where(d => (d.DelFlg == false)
-                        && (model.ProductNm == null || d.ProductNm.Contains(model.ProductNm)))
+                        && (model.ProductNm == null || d.ProductNm.Contains(model.ProductNm))
+                        && (model.Color == null || d.Color.Contains(model.Color))
+                        && (model.BrandId == null || d.BrandId == model.BrandId)
+                        )
                     .Select(s => new ProductVModel
                     {
                         ProductId = s.ProductId,
@@ -60,8 +62,8 @@ namespace SneakerShopAPI.Repositories
                         BrandId = s.BrandId,
                         BrandNm = s.Brand.BrandNm,
                         Discount = s.Discount,
-                        photoList = photoProductRepository.GetAll(s.ProductId),
-                        productDetailList = productDetailRepository.GetAll(s.ProductId, model.isStill)
+                        photoList = s.PhotoProduct.Where(d => d.DelFlg == false).Select(p => p.Photo).ToList(),
+                        productDetailList = model.isStill == 1 ? s.ProductDetail.Where(pd => pd.Quantity > 0).ToList() : s.ProductDetail.ToList()
                     }); ;
 
             var totalCount = query.Count();
@@ -95,7 +97,7 @@ namespace SneakerShopAPI.Repositories
             {
                 PhotoProduct photoProduct = new PhotoProduct
                 {
-                    ProductId = model.ProductId,
+                    ProductId = product.ProductId,
                     Photo = photo,
                     DelFlg = false,
                     InsBy = model.Implementer,
@@ -137,7 +139,7 @@ namespace SneakerShopAPI.Repositories
             {
                 PhotoProduct photoProduct = new PhotoProduct
                 {
-                    ProductId = model.ProductId,
+                    ProductId = product.ProductId,
                     Photo = photo,
                     DelFlg = false,
                     InsBy = model.Implementer,

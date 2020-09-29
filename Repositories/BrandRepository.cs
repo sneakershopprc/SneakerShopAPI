@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SneakerShopAPI.Repositories
 {
-    public class BrandRepository: BaseRepository
+    public class BrandRepository : BaseRepository
     {
         private readonly IMapper mapper;
 
@@ -20,7 +20,7 @@ namespace SneakerShopAPI.Repositories
         }
         public Brand Get(string brandId)
         {
-            Brand brand = context.Brand.Find(brandId);
+            Brand brand = context.Brand.SingleOrDefault(s => s.BrandId == brandId && s.DelFlg == false);
             return brand;
         }
         public BrandVModel GetToVModel(string brandId)
@@ -47,7 +47,7 @@ namespace SneakerShopAPI.Repositories
                         Description = s.Description
                     });
 
-            var totalCount =  query.Count();
+            var totalCount = query.Count();
             List<BrandVModel> result = null;
             if (model.SortBy == Constants.SortBy.SORT_NAME_ASC)
             {
@@ -57,7 +57,7 @@ namespace SneakerShopAPI.Repositories
             {
                 query = query.OrderByDescending(t => t.BrandNm);
             }
-            result =  query.Skip(model.Size * (model.Page - 1))
+            result = query.Skip(model.Size * (model.Page - 1))
             .Take(model.Size)
             .ToList();
             return PagedList<BrandVModel>.ToPagedList(result, totalCount, model.Page, model.Size);
@@ -77,7 +77,7 @@ namespace SneakerShopAPI.Repositories
             context.SaveChanges();
             return GetToVModel(brand.BrandId);
         }
-  
+
         public bool Delete(string brandId, string implementer)
         {
             Brand brand = Get(brandId);
@@ -101,7 +101,7 @@ namespace SneakerShopAPI.Repositories
         }
         public string GetId()
         {
-            IEnumerable<Brand> brandList =  context.Brand.ToList();
+            IEnumerable<Brand> brandList = context.Brand.ToList();
             if (brandList.ToList().Count > 0)
             {
                 int max = 0;
