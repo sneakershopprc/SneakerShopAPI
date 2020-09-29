@@ -39,7 +39,7 @@ namespace SneakerShopAPI.Repositories
                 Color = s.Color,
                 BrandId = s.BrandId,
                 BrandNm = s.Brand.BrandNm,
-                Price = s.ProductDetail.Min(m => m.Price),
+                Price = s.ProductDetail.Count > 0 ? s.ProductDetail.Min(t => t.Price) : 0,
                 Discount = s.Discount,
                 photoList = s.PhotoProduct.Where(d => d.DelFlg == false).Select(p => p.Photo).ToList(),
                 productDetailList = isStill == 1 ? s.ProductDetail.Where(pd => pd.Quantity > 0).ToList() : s.ProductDetail.ToList()
