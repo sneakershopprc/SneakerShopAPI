@@ -49,6 +49,7 @@ namespace SneakerShopAPI.Repositories
 
         public PagedList<ProductVModel> GetAll(SearchProductVModel model)
         {
+            // get all don't need to get productDetailList
             var query = context.Product.Where(d => (d.DelFlg == false)
                         && (model.ProductNm == null || d.ProductNm.Contains(model.ProductNm))
                         && (model.Color == null || d.Color.Contains(model.Color))
@@ -65,7 +66,7 @@ namespace SneakerShopAPI.Repositories
                         Price = s.ProductDetail.Count > 0 ? s.ProductDetail.Min(t => t.Price) : 0,
                         Discount = s.Discount,
                         photoList = s.PhotoProduct.Where(d => d.DelFlg == false).Select(p => p.Photo).ToList(),
-                        productDetailList = model.isStill == 1 ? s.ProductDetail.Where(pd => pd.Quantity > 0).ToList() : s.ProductDetail.ToList()
+                        //productDetailList = model.isStill == 1 ? s.ProductDetail.Where(pd => pd.Quantity > 0).ToList() : s.ProductDetail.ToList()
                     }); 
 
             var totalCount = query.Count();
