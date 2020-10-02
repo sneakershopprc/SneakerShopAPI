@@ -52,7 +52,8 @@ namespace SneakerShopAPI
                     name: "CorsPolicy",
                     builder =>
                     {
-                        builder.AllowAnyOrigin()
+                        builder.WithOrigins("http://localhost:8080")
+                        .AllowCredentials()
                         .AllowAnyMethod()
                         .AllowAnyHeader();
                     });
@@ -108,7 +109,7 @@ namespace SneakerShopAPI
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 c.RoutePrefix = string.Empty;
             });
-
+            app.UseCors("CorsPolicy");
             app.UseHttpsRedirection();
             app.UseMvc();
         }
