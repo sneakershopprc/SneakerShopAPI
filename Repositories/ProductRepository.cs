@@ -164,16 +164,16 @@ namespace SneakerShopAPI.Repositories
                 foreach (var product in productList)
                 {
                     string id = product.ProductId;
-                    int number = int.Parse(id.Substring(7));
+                    int number = int.Parse(id.Substring(3));
                     if (max < number)
                     {
                         max = number;
                     }
                 }
                 max++;
-                return "product" + max;
+                return "pro" + max;
             }
-            return "product1";
+            return "pro1";
         }
     }
 }
