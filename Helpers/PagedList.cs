@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 namespace ssrcore.Helpers
 {
-    public class PagedList<T> : List<T>
+    public class PagedList<T>
     {
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
         public int PageSize { get; set; }
         public int TotalCount { get; set; }
+        public List<T> data { get; set; }
 
         public PagedList(List<T> items, int count, int pageNumber, int pageSize)
         {
@@ -16,8 +17,8 @@ namespace ssrcore.Helpers
             PageSize = PageSize;
             CurrentPage = pageNumber;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-
-            AddRange(items);
+            data = items;
+            //AddRange(items);
         }
 
         public static PagedList<T> ToPagedList(List<T> source, int totalCount, int pageNumber, int pageSize)
