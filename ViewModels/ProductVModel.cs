@@ -12,7 +12,7 @@ namespace SneakerShopAPI.ViewModels
         public string ProductNm { get; set; }
         public string Color { get; set; }
         public string Description { get; set; }
-        public decimal Price { get; set; }
+        public double Price { get; set; }
         public double Discount { get; set; }
         public string BrandId { get; set; }
         public string BrandNm { get; set; }

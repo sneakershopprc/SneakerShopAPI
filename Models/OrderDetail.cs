@@ -14,8 +14,8 @@ namespace SneakerShopAPI.Models
         public string OrderId { get; set; }
         [Column("product")]
         public string Product { get; set; }
-        [Column("price", TypeName = "decimal(18, 0)")]
-        public decimal? Price { get; set; }
+        [Column("price")]
+        public double Price { get; set; }
         [Column("quantity")]
         public int? Quantity { get; set; }
         [Column("discount")]
