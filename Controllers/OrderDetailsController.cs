@@ -27,5 +27,16 @@ namespace SneakerShopAPI.Controllers
             return Ok(result);
         }
 
+        [HttpPost]
+        public IActionResult CheckOrderDetail([FromBody] List<OrderDetailVModel> model)
+        {
+            var result = orderDetailRepository.checkOrderDetail(model);
+            if (result)
+            {
+                return Ok();
+            }
+
+            return BadRequest();
+        }
     }
 }

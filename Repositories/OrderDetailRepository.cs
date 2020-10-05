@@ -12,12 +12,12 @@ namespace SneakerShopAPI.Repositories
     public class OrderDetailRepository : BaseRepository
     {
         private readonly IMapper mapper;
-        private readonly ProductRepository productRepository;
+        private readonly ProductDetailRepository productDetailRepository;
 
-        public OrderDetailRepository(SneakerShopContext context, IMapper mapper, ProductRepository _productRepository) : base(context)
+        public OrderDetailRepository(SneakerShopContext context, IMapper mapper, ProductDetailRepository _productDetailRepository) : base(context)
         {
             this.mapper = mapper;
-            productRepository = _productRepository;
+            productDetailRepository = _productDetailRepository;
 
         }
         public PagedList<OrderDetail> GetAll(SearchOrderVModel model)
@@ -48,7 +48,21 @@ namespace SneakerShopAPI.Repositories
             return true;
         }
 
-      
+
+        public bool checkOrderDetail(List<OrderDetailVModel> orderDetails)
+        {
+            string errorMsg = "";
+            foreach(OrderDetailVModel detailVModel in orderDetails)
+            {
+                ProductDetail productDetail = productDetailRepository.Get(detailVModel.DetailId);
+                if(productDetail.Quantity < detailVModel.Quantity)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
 
     }
 }
