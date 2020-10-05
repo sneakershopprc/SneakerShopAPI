@@ -14,5 +14,12 @@ namespace ssrcore.Helpers
             public const int SORT_NAME_DES = 2;
         }
 
+        public struct Status
+        {
+            public const string STATUS_WAITING = "Waiting";
+            public const string STATUS_CANCEL = "Cancel";
+            public const string STATUS_FINISH = "Finished";
+        }
+
     }
 }

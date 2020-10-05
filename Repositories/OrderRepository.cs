@@ -70,6 +70,7 @@ namespace SneakerShopAPI.Repositories
         {
             var order = this.mapper.Map<Order>(model);
             order.OrderId = GetId();
+            order.Status = Constants.Status.STATUS_WAITING;
             order.InsBy = model.Username;
             order.InsDatetime = DateTime.Now;
             order.UpdBy = model.Username;
@@ -81,6 +82,7 @@ namespace SneakerShopAPI.Repositories
                 ProductDetailVModel productDetail = context.ProductDetail.Where(s => s.Id == orderDetailVModel.DetailId)
                     .Select(s => new ProductDetailVModel
                     {
+                        Id = s.Id,
                         ProductId = s.ProductId,
                         ProductNm = s.Product.ProductNm,
                         Color = s.Product.Color,
@@ -91,7 +93,7 @@ namespace SneakerShopAPI.Repositories
                         BrandNm = s.Product.Brand.BrandNm
                     }).SingleOrDefault();
                 // check quantity
-                if(productDetail.Quantity < orderDetailVModel.Quantity)
+                if (productDetail.Quantity < orderDetailVModel.Quantity)
                 {
                     // not enough
                     return null;
@@ -114,12 +116,27 @@ namespace SneakerShopAPI.Repositories
             return GetToVModel(order.OrderId);
         }
 
-        public OrderVModel Update(string orderId, OrderVModel model)
+        public OrderVModel Update(string orderId, string status)
         {
             Order order = Get(orderId);
-            order.Status = model.Status;
-            order.UpdBy = model.Username;
+            order.Status = status;
+            order.UpdBy = "sonmap";
             order.UpdDatetime = DateTime.Now;
+
+            // gọi cái order
+            var orderDetails = orderDetailRepository.GetAll(new SearchOrderVModel { OrderId = orderId });
+            if (status.Equals(Constants.Status.STATUS_CANCEL))
+            {
+                foreach (OrderDetail orderDetail in orderDetails.data)
+                {
+                    ProductDetailVModel objFromJson = JsonConvert.DeserializeObject<ProductDetailVModel>(orderDetail.Product);
+                    // get product detail in DB
+                    ProductDetail productDetail = context.ProductDetail.SingleOrDefault(s => s.Id == objFromJson.Id);
+                    // add quantity in product detail
+                    productDetail.Quantity += (int)orderDetail.Quantity;
+                    productDetailRepository.Update(productDetail);
+                }
+            }
             context.SaveChanges();
             return GetToVModel(order.OrderId);
         }
