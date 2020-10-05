@@ -27,6 +27,17 @@ namespace SneakerShopAPI.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{Id}", Name = "GetProductDetail")]
+        public IActionResult GetProductDetail(int Id)
+        {
+            var productDetail = productDetailRepository.GetVModel(Id);
+            if (productDetail == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(productDetail);
+        }
         [HttpPost]
         public IActionResult Create([FromBody] ProductDetail model)
         {
@@ -39,10 +50,10 @@ namespace SneakerShopAPI.Controllers
             return BadRequest();
         }
 
-        [HttpPut("{productId}")]
-        public IActionResult Update(string productId, [FromBody] ProductDetail model)
+        [HttpPut("{Id}")]
+        public IActionResult Update(int Id, [FromBody] ProductDetail model)
         {
-            var productDetail = productDetailRepository.Get(productId, model.Size);
+            var productDetail = productDetailRepository.Get(Id);
             if (productDetail == null)
             {
                 return NotFound();
@@ -50,7 +61,7 @@ namespace SneakerShopAPI.Controllers
 
             if (ModelState.IsValid)
             {
-                var result = productDetailRepository.Update(model);
+                var result = productDetailRepository.Update(Id, model);
                 return Ok(result);
             }
 

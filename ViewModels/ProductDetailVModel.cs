@@ -7,6 +7,7 @@ namespace SneakerShopAPI.ViewModels
 {
     public class ProductDetailVModel
     {
+        public int Id { get; set; }
         public string ProductId { get; set; }
         public double Size { get; set; }
         public int Quantity { get; set; }
