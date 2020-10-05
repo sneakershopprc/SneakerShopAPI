@@ -71,13 +71,17 @@ namespace SneakerShopAPI.Repositories
 
             var totalCount = query.Count();
             List<ProductVModel> result = null;
-            if (model.SortBy == Constants.SortBy.SORT_NAME_ASC)
+            if (model.SortBy == Constants.SortBy.SORT_DEFAULT)
             {
                 query = query.OrderBy(t => t.ProductNm);
             }
+            else  if (model.SortBy == Constants.SortBy.SORT_NAME_ASC)
+            {
+                query = query.OrderBy(t => t.Price);
+            }
             else if (model.SortBy == Constants.SortBy.SORT_NAME_DES)
             {
-                query = query.OrderByDescending(t => t.ProductNm);
+                query = query.OrderByDescending(t => t.Price);
             }
             result = query.Skip(model.Size * (model.Page - 1))
             .Take(model.Size)
