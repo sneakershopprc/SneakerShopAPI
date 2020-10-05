@@ -29,7 +29,7 @@ namespace SneakerShopAPI.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=SE130084;Database=SneakerShop;uid=sa;password=Sonheo123");
+                optionsBuilder.UseSqlServer("Server=sneakershopprc391.database.windows.net;Database=SneakerShop;uid=sneakershop;password=HocPRC391DeDang");
             }
         }
 
@@ -40,7 +40,7 @@ namespace SneakerShopAPI.Models
             modelBuilder.Entity<Account>(entity =>
             {
                 entity.HasKey(e => e.Username)
-                    .HasName("PK__Account__F3DBC573FE525B58");
+                    .HasName("PK__Account__F3DBC5731E25C6E2");
 
                 entity.Property(e => e.Username)
                     .IsUnicode(false)

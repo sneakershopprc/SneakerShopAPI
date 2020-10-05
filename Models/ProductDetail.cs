@@ -12,12 +12,12 @@ namespace SneakerShopAPI.Models
         [Column("productId")]
         [StringLength(8)]
         public string ProductId { get; set; }
-        [Column("size", TypeName = "decimal(18, 0)")]
-        public decimal Size { get; set; }
         [Column("quantity")]
         public int Quantity { get; set; }
-        [Column("price", TypeName = "decimal(18, 0)")]
-        public decimal Price { get; set; }
+        [Column("price")]
+        public double Price { get; set; }
+        [Column("size")]
+        public double Size { get; set; }
 
         [ForeignKey("ProductId")]
         [InverseProperty("ProductDetail")]

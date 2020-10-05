@@ -9,6 +9,7 @@ namespace ssrcore.Helpers
     {
         public struct SortBy
         {
+            public const int SORT_DEFAULT = 0;
             public const int SORT_NAME_ASC = 1;
             public const int SORT_NAME_DES = 2;
         }

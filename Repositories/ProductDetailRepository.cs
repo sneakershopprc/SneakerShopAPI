@@ -14,12 +14,12 @@ namespace SneakerShopAPI.Repositories
         {
 
         }
-        public ProductDetail Get(string productId, decimal size)
+        public ProductDetail Get(string productId, double size)
         {
             ProductDetail productDetail = context.ProductDetail.SingleOrDefault(s => s.ProductId == productId && s.Size == size);
             return productDetail;
         }
-        public ProductDetailVModel GetVModel(string productId, decimal size)
+        public ProductDetailVModel GetVModel(string productId, double size)
         {
             ProductDetailVModel productDetail = context.ProductDetail.Where(s => s.ProductId == productId && s.Size == size).Select(s => new ProductDetailVModel
             {
