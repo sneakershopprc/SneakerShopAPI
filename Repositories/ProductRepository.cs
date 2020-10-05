@@ -53,7 +53,7 @@ namespace SneakerShopAPI.Repositories
             var query = context.Product.Where(d => (d.DelFlg == false)
                         && (model.ProductNm == null || d.ProductNm.Contains(model.ProductNm))
                         && (model.Color == null || d.Color.Contains(model.Color))
-                        && (model.BrandId == null || d.BrandId == model.BrandId)
+                        && (model.BrandList == null || model.BrandList.Contains(d.BrandId))
                         )
                     .Select(s => new ProductVModel
                     {

@@ -11,7 +11,7 @@ namespace SneakerShopAPI.ViewModels
         public string ProductNm { get; set; }
         public string Color { get; set; }
         public double Price { get; set; }
-        public string BrandId { get; set; }
+        public List<String> BrandList { get; set; }
         public string BrandNm { get; set; }
         public int isStill { get; set; }
 
