@@ -124,7 +124,7 @@ namespace SneakerShopAPI.Repositories
             product.DelFlg = true;
             product.UpdBy = implementer;
             product.UpdDatetime = DateTime.Now;
-            photoProductRepository.DeleteByProductId(productId, implementer);
+            photoProductRepository.DeleteByProductId(productId);
 
             context.SaveChanges();
             return true;
@@ -140,7 +140,7 @@ namespace SneakerShopAPI.Repositories
             product.UpdBy = model.Implementer;
             product.UpdDatetime = DateTime.Now;
             // delete all old photo 
-            photoProductRepository.DeleteByProductId(productId, model.Implementer);
+            photoProductRepository.DeleteByProductId(productId);
             // add new photo list
             foreach (string photo in model.photoList)
             {

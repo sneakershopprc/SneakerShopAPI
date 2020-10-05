@@ -28,14 +28,15 @@ namespace SneakerShopAPI.Repositories
             return true;
         }
 
-        public bool DeleteByProductId(string productId, string implementer)
+        public bool DeleteByProductId(string productId)
         {
             List<PhotoProduct> productPhotoList = context.PhotoProduct.Where(d => d.ProductId == productId).ToList();
             foreach (PhotoProduct photoProduct in productPhotoList)
             {
-                photoProduct.DelFlg = true;
-                photoProduct.UpdBy = implementer;
-                photoProduct.UpdDatetime = DateTime.Now;
+                context.PhotoProduct.Remove(photoProduct);
+                //photoProduct.DelFlg = true;
+                //photoProduct.UpdBy = implementer;
+                //photoProduct.UpdDatetime = DateTime.Now;
             }
             return true;
         }
