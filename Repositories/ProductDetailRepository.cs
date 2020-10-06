@@ -91,7 +91,6 @@ namespace SneakerShopAPI.Repositories
             ProductDetail productDetail = Get(model.Id);
             productDetail.Price = model.Price;
             productDetail.Quantity = model.Quantity;
-            context.SaveChanges();
             return GetVModel(productDetail.ProductId, productDetail.Size);
         }
     }
