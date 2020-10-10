@@ -16,6 +16,7 @@ namespace SneakerShopAPI.ViewModels
         public string Color { get; set; }
         public double Discount { get; set; }
         public string BrandNm { get; set; }
+        public string Photo { get; set; }
 
     }
 }

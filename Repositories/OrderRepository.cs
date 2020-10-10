@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using SneakerShopAPI.Models;
 using SneakerShopAPI.ViewModels;
 using ssrcore.Helpers;
+using ssrcore.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -47,9 +48,9 @@ namespace SneakerShopAPI.Repositories
             order.OrderDetails = orderDetailRepository.GetAll(orderId);
             return order;
         }
-        public PagedList<OrderVModel> GetAll(SearchOrderVModel model)
+        public PagedList<OrderVModel> GetAll(ResourceParameters model)
         {
-            var query = context.Order.Where(d => (model.OrderId == null || d.OrderId == model.OrderId))
+            var query = context.Order
                     .Select(s => new OrderVModel
                     {
                         OrderId = s.OrderId,
@@ -100,7 +101,8 @@ namespace SneakerShopAPI.Repositories
                         Quantity = s.Quantity,
                         Price = s.Price,
                         Discount = s.Product.Discount,
-                        BrandNm = s.Product.Brand.BrandNm
+                        BrandNm = s.Product.Brand.BrandNm,
+                        Photo = s.Product.PhotoProduct.ElementAt(0).Photo
                     }).SingleOrDefault();
                 // check quantity
                 if (productDetail.Quantity < orderDetailVModel.Quantity)
@@ -112,8 +114,6 @@ namespace SneakerShopAPI.Repositories
                 var orderDetail = mapper.Map<OrderDetail>(orderDetailVModel);
                 orderDetail.OrderId = GetId();
                 orderDetail.Product = JsonConvert.SerializeObject(productDetail);
-                orderDetail.Price = productDetail.Price;
-                orderDetail.Discount = productDetail.Discount;
                 // add in OrderDetail table
                 orderDetailRepository.Create(orderDetail);
 

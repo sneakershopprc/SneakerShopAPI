@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SneakerShopAPI.Repositories;
 using SneakerShopAPI.ViewModels;
+using ssrcore.ViewModels;
 
 namespace SneakerShopAPI.Controllers
 {
@@ -21,7 +22,7 @@ namespace SneakerShopAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllOrder([FromQuery] SearchOrderVModel model)
+        public IActionResult GetAllOrder([FromQuery] ResourceParameters model)
         {
             var result = orderRepository.GetAll(model);
             return Ok(result);
