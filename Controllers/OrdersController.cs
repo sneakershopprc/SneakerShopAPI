@@ -49,7 +49,7 @@ namespace SneakerShopAPI.Controllers
                 return Created("", result);
             }
 
-            return BadRequest();
+            return BadRequest("There is an item in your cart that is out of stock");
         }
 
         [HttpPut("{orderId}")]
