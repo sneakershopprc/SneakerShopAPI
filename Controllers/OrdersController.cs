@@ -53,7 +53,7 @@ namespace SneakerShopAPI.Controllers
         }
 
         [HttpPut("{orderId}")]
-        public IActionResult Update(string orderId, [FromBody] string status)
+        public IActionResult Update(string orderId, [FromBody] OrderVModel orderVModel)
         {
             var order = orderRepository.Get(orderId);
             if (order == null)
@@ -63,7 +63,7 @@ namespace SneakerShopAPI.Controllers
 
             if (ModelState.IsValid)
             {
-                var result = orderRepository.Update(orderId, status);
+                var result = orderRepository.Update(orderId, orderVModel);
                 return Ok(result);
             }
 

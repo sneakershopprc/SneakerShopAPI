@@ -126,16 +126,16 @@ namespace SneakerShopAPI.Repositories
             return GetToVModel(order.OrderId);
         }
 
-        public OrderVModel Update(string orderId, string status)
+        public OrderVModel Update(string orderId, OrderVModel orderVModel)
         {
             Order order = Get(orderId);
-            order.Status = status;
+            order.Status = orderVModel.Status;
             order.UpdBy = "sonmap";
             order.UpdDatetime = DateTime.Now;
 
             // gọi cái order
             var orderDetails = orderDetailRepository.GetAll(orderId);
-            if (status.Equals(Constants.Status.STATUS_CANCEL))
+            if (orderVModel.Status.Equals(Constants.Status.STATUS_CANCEL))
             {
                 foreach (OrderDetailVModel orderDetailVModel in orderDetails)
                 {
