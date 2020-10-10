@@ -26,7 +26,6 @@ namespace SneakerShopAPI.Models
         [StringLength(50)]
         public string Color { get; set; }
         [Column("description")]
-        [StringLength(500)]
         public string Description { get; set; }
         [Column("discount")]
         public double Discount { get; set; }

@@ -27,8 +27,6 @@ namespace SneakerShopAPI.Repositories
                     {
                         Product = s.Product,
                         Quantity = (int)s.Quantity,
-                        Price = s.Price,
-                        Discount = s.Discount
                     }).ToList();
             return result;
         }

@@ -67,6 +67,8 @@ namespace SneakerShopAPI.Models
                     .IsUnicode(false)
                     .ValueGeneratedNever();
 
+                entity.Property(e => e.DelFlg).HasDefaultValueSql("((0))");
+
                 entity.Property(e => e.InsBy).IsUnicode(false);
 
                 entity.Property(e => e.InsDatetime).HasDefaultValueSql("(getdate())");
@@ -104,8 +106,6 @@ namespace SneakerShopAPI.Models
 
             modelBuilder.Entity<OrderDetail>(entity =>
             {
-                entity.Property(e => e.Discount).HasDefaultValueSql("((0))");
-
                 entity.Property(e => e.OrderId).IsUnicode(false);
 
                 entity.HasOne(d => d.Order)
