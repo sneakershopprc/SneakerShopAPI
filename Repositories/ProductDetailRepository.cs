@@ -14,14 +14,14 @@ namespace SneakerShopAPI.Repositories
         {
 
         }
-        public ProductDetail Get(int detailId)
+        public ProductDetail Get(int ProductDetailId)
         {
-            ProductDetail productDetail = context.ProductDetail.SingleOrDefault(s => s.Id == detailId);
+            ProductDetail productDetail = context.ProductDetail.SingleOrDefault(s => s.Id == ProductDetailId);
             return productDetail;
         }
-        public ProductDetailVModel GetVModel(int detailId)
+        public ProductDetailVModel GetVModel(int ProductDetailId)
         {
-            ProductDetailVModel productDetail = context.ProductDetail.Where(s => s.Id == detailId).Select(s => new ProductDetailVModel
+            ProductDetailVModel productDetail = context.ProductDetail.Where(s => s.Id == ProductDetailId).Select(s => new ProductDetailVModel
             {
                 Id = s.Id,
                 ProductId = s.ProductId,

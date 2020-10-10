@@ -20,25 +20,17 @@ namespace SneakerShopAPI.Repositories
             productRepository = _productRepository;
 
         }
-        public PagedList<OrderDetail> GetAll(SearchOrderVModel model)
+        public List<OrderDetailVModel> GetAll(string orderId)
         {
-            var query = context.OrderDetail.Where(d => (model.OrderId == null || d.OrderId == model.OrderId))
-                    .Select(s => new OrderDetail
+            var result = context.OrderDetail.Where(d => (orderId == null || d.OrderId == orderId))
+                    .Select(s => new OrderDetailVModel
                     {
-                        Id = s.Id,
-                        OrderId = s.OrderId,
                         Product = s.Product,
-                        Quantity = s.Quantity,
+                        Quantity = (int)s.Quantity,
                         Price = s.Price,
                         Discount = s.Discount
-                    });
-
-            var totalCount = query.Count();
-            List<OrderDetail> result = null;
-            result = query.Skip(model.Size * (model.Page - 1))
-            .Take(model.Size)
-            .ToList();
-            return PagedList<OrderDetail>.ToPagedList(result, totalCount, model.Page, model.Size);
+                    }).ToList();
+            return result;
         }
 
 

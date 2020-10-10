@@ -14,6 +14,8 @@ namespace SneakerShopAPI.ViewModels
         public string Phonenumber { get; set; }
         public string ShippingAddress { get; set; }
         public string Status { get; set; }
+        public DateTime InsDatetime { get; set; }
+        public DateTime UpdDatetime { get; set; }
         public List<OrderDetailVModel> OrderDetails { get; set; }
     }
 }

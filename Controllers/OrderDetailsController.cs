@@ -21,9 +21,9 @@ namespace SneakerShopAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllOrderDetail([FromQuery] SearchOrderVModel model)
+        public IActionResult GetAllOrderDetail([FromQuery] string orderId)
         {
-            var result = orderDetailRepository.GetAll(model);
+            var result = orderDetailRepository.GetAll(orderId);
             return Ok(result);
         }
 

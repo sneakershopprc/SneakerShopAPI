@@ -40,8 +40,11 @@ namespace SneakerShopAPI.Repositories
                 Phonenumber = s.Phonenumber,
                 ShippingAddress = s.ShippingAddress,
                 Status = s.Status,
+                InsDatetime = (DateTime)s.InsDatetime,
+                UpdDatetime = (DateTime)s.UpdDatetime,
                 Username = s.Username
             }).SingleOrDefault();
+            order.OrderDetails = orderDetailRepository.GetAll(orderId);
             return order;
         }
         public PagedList<OrderVModel> GetAll(SearchOrderVModel model)
@@ -54,6 +57,8 @@ namespace SneakerShopAPI.Repositories
                         Phonenumber = s.Phonenumber,
                         ShippingAddress = s.ShippingAddress,
                         Status = s.Status,
+                        InsDatetime = (DateTime)s.InsDatetime,
+                        UpdDatetime = (DateTime)s.UpdDatetime,
                         Username = s.Username
                     });
 
@@ -62,6 +67,10 @@ namespace SneakerShopAPI.Repositories
             result = query.Skip(model.Size * (model.Page - 1))
             .Take(model.Size)
             .ToList();
+            //foreach(OrderVModel orderVModel in result)
+            //{
+            //    orderVModel.OrderDetails = orderDetailRepository.GetAll(orderVModel.OrderId);
+            //}
             return PagedList<OrderVModel>.ToPagedList(result, totalCount, model.Page, model.Size);
         }
 
@@ -80,7 +89,7 @@ namespace SneakerShopAPI.Repositories
             foreach (OrderDetailVModel orderDetailVModel in model.OrderDetails)
             {
                 // get product detail in DB
-                ProductDetailVModel productDetail = context.ProductDetail.Where(s => s.Id == orderDetailVModel.DetailId)
+                ProductDetailVModel productDetail = context.ProductDetail.Where(s => s.Id == orderDetailVModel.ProductDetailId)
                     .Select(s => new ProductDetailVModel
                     {
                         Id = s.Id,
@@ -125,16 +134,16 @@ namespace SneakerShopAPI.Repositories
             order.UpdDatetime = DateTime.Now;
 
             // gọi cái order
-            var orderDetails = orderDetailRepository.GetAll(new SearchOrderVModel { OrderId = orderId });
+            var orderDetails = orderDetailRepository.GetAll(orderId);
             if (status.Equals(Constants.Status.STATUS_CANCEL))
             {
-                foreach (OrderDetail orderDetail in orderDetails.data)
+                foreach (OrderDetailVModel orderDetailVModel in orderDetails)
                 {
-                    ProductDetailVModel objFromJson = JsonConvert.DeserializeObject<ProductDetailVModel>(orderDetail.Product);
+                    ProductDetailVModel objFromJson = JsonConvert.DeserializeObject<ProductDetailVModel>(orderDetailVModel.Product);
                     // get product detail in DB
                     ProductDetail productDetail = context.ProductDetail.SingleOrDefault(s => s.Id == objFromJson.Id);
                     // add quantity in product detail
-                    productDetail.Quantity += (int)orderDetail.Quantity;
+                    productDetail.Quantity += (int)orderDetailVModel.Quantity;
                     productDetailRepository.Update(productDetail);
                 }
             }
