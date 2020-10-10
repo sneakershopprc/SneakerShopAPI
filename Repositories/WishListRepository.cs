@@ -2,6 +2,7 @@
 using SneakerShopAPI.Models;
 using SneakerShopAPI.ViewModels;
 using ssrcore.Helpers;
+using ssrcore.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,40 +21,58 @@ namespace SneakerShopAPI.Repositories
             productRepository = _productRepository;
 
         }
-        public WishList Get(int Id)
+        public WishList Get(string productId)
         {
-            WishList wishList = context.WishList.SingleOrDefault(s => s.Id == Id && s.DelFlg == false);
+            WishList wishList = context.WishList.SingleOrDefault(s => s.Username == "sonmap" && s.ProductId == productId && s.DelFlg == false);
             return wishList;
         }
-        public PagedList<WishListVModel> GetAll(SearchWishListVModel model)
+        public WishListVModel GetToVModel(string productId)
+        {
+            WishListVModel wishList = context.WishList.Where(s => s.Username == "sonmap" && s.ProductId == productId && s.DelFlg == false)
+                .Select(s => new WishListVModel
+                {
+                    Id = s.Id,
+                    Product = new ProductVModel
+                    {
+                        ProductId = s.ProductId,
+                        ProductNm = s.Product.ProductNm,
+                        Description = s.Product.Description,
+                        Color = s.Product.Color,
+                        BrandId = s.Product.BrandId,
+                        BrandNm = s.Product.Brand.BrandNm,
+                        Price = s.Product.ProductDetail.Count > 0 ? s.Product.ProductDetail.Min(t => t.Price) : 0,
+                        Discount = s.Product.Discount,
+                        photoList = s.Product.PhotoProduct.Where(d => d.DelFlg == false).Select(p => p.Photo).ToList(),
+                    }
+                }).SingleOrDefault();
+            return wishList;
+        }
+        public PagedList<WishListVModel> GetAll(ResourceParameters model)
         {
             var query = context.WishList.Where(d => (d.DelFlg == false)
-                        && (model.Username == null || d.Username == model.Username))
+                        && (d.Username == "sonmap"))
                     .Select(s => new WishListVModel
                     {
                         Id = s.Id,
-                        ProductId = s.ProductId,
-                        //Product = mapper.Map<ProductVModel>(s.Product),
-                        Username = s.Username
-                    }); 
-
+                        Product = new ProductVModel
+                        {
+                            ProductId = s.ProductId,
+                            ProductNm = s.Product.ProductNm,
+                            Description = s.Product.Description,
+                            Color = s.Product.Color,
+                            BrandId = s.Product.BrandId,
+                            BrandNm = s.Product.Brand.BrandNm,
+                            Price = s.Product.ProductDetail.Count > 0 ? s.Product.ProductDetail.Min(t => t.Price) : 0,
+                            Discount = s.Product.Discount,
+                            photoList = s.Product.PhotoProduct.Where(d => d.DelFlg == false).Select(p => p.Photo).ToList(),
+                        }
+                    }
+                    );
             var totalCount = query.Count();
             List<WishListVModel> result = null;
-            if (model.SortBy == Constants.SortBy.SORT_NAME_ASC)
-            {
-                query = query.OrderBy(t => t.Product.ProductNm);
-            }
-            else if (model.SortBy == Constants.SortBy.SORT_NAME_DES)
-            {
-                query = query.OrderByDescending(t => t.Product.ProductNm);
-            }
             result = query.Skip(model.Size * (model.Page - 1))
             .Take(model.Size)
             .ToList();
-            // set productvmodel
-            for (int i = 0; i < result.Count; i++){
-                result.ElementAt(i).Product = productRepository.GetToVModel(result.ElementAt(i).ProductId, 0);
-            }
             return PagedList<WishListVModel>.ToPagedList(result, totalCount, model.Page, model.Size);
         }
 
@@ -62,21 +81,23 @@ namespace SneakerShopAPI.Repositories
         {
             var wishList = this.mapper.Map<WishList>(model);
             wishList.DelFlg = false;
-            wishList.InsBy = model.Username;
+            wishList.Username = "sonmap";
+            wishList.InsBy = "sonmap";
             wishList.InsDatetime = DateTime.Now;
-            wishList.UpdBy = model.Username;
+            wishList.UpdBy = "sonmap";
             wishList.UpdDatetime = DateTime.Now;
             context.WishList.Add(wishList);
             context.SaveChanges();
             return true;
         }
 
-        public bool Delete(int Id, string username)
+        public bool Delete(string productId)
         {
-            WishList wishList = Get(Id);
-            wishList.DelFlg = true;
-            wishList.UpdBy = username;
-            wishList.UpdDatetime = DateTime.Now;
+            WishList wishList = Get(productId);
+            //wishList.DelFlg = true;
+            //wishList.UpdBy = "sonmap";
+            //wishList.UpdDatetime = DateTime.Now;
+            context.WishList.Remove(wishList);
             context.SaveChanges();
             return true;
         }

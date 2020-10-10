@@ -71,6 +71,7 @@ namespace SneakerShopAPI.Repositories
             var order = this.mapper.Map<Order>(model);
             order.OrderId = GetId();
             order.Status = Constants.Status.STATUS_WAITING;
+            order.Username = model.Username;
             order.InsBy = model.Username;
             order.InsDatetime = DateTime.Now;
             order.UpdBy = model.Username;

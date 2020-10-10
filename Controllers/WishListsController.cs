@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SneakerShopAPI.Repositories;
 using SneakerShopAPI.ViewModels;
+using ssrcore.ViewModels;
 
 namespace SneakerShopAPI.Controllers
 {
@@ -21,13 +22,25 @@ namespace SneakerShopAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllWishList([FromQuery] SearchWishListVModel model)
+        public IActionResult GetAllWishList([FromQuery] ResourceParameters model)
         {
             var result = wishListRepository.GetAll(model);
             return Ok(result);
         }
 
 
+
+        [HttpGet("{productId}")]
+        public IActionResult Get(string productId)
+        {
+            var wishlist = wishListRepository.GetToVModel(productId);
+            if (wishlist == null)
+            {
+                return Ok();
+            }
+
+            return Ok(wishlist);
+        }
         [HttpPost]
         public IActionResult Create([FromBody] WishListVModel model)
         {
@@ -41,15 +54,15 @@ namespace SneakerShopAPI.Controllers
         }
 
 
-        [HttpDelete("{Id}")]
-        public IActionResult Delete(int Id, [FromQuery] string username)
+        [HttpDelete("{productId}")]
+        public IActionResult Delete(string productId)
         {
-            var wishList = wishListRepository.Get(Id);
+            var wishList = wishListRepository.Get(productId);
             if (wishList == null)
             {
                 return NotFound();
             }
-            var result = wishListRepository.Delete(Id, username);
+            var result = wishListRepository.Delete(productId);
             if (result)
             {
                 return NoContent();
