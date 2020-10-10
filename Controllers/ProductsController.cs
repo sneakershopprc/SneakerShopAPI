@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SneakerShopAPI.Repositories;
 using SneakerShopAPI.ViewModels;
+using static ssrcore.Helpers.Constants;
 
 namespace SneakerShopAPI.Controllers
 {
@@ -40,8 +44,10 @@ namespace SneakerShopAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = ParticipantsRoleConst.ADMIN)]
         public IActionResult Create([FromBody] ProductVModel model)
         {
+            model.Implementer = GetCurrentUser();
             var result = productRepository.Create(model);
             if (result != null)
             {
@@ -52,6 +58,7 @@ namespace SneakerShopAPI.Controllers
         }
 
         [HttpPut("{productId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = ParticipantsRoleConst.ADMIN)]
         public IActionResult Update(string productId, [FromBody] ProductVModel model)
         {
             var product = productRepository.Get(productId);
@@ -62,6 +69,7 @@ namespace SneakerShopAPI.Controllers
 
             if (ModelState.IsValid)
             {
+                model.Implementer = GetCurrentUser();
                 var result = productRepository.Update(productId, model);
                 return Ok(result);
             }
@@ -70,13 +78,15 @@ namespace SneakerShopAPI.Controllers
         }
 
         [HttpDelete("{productId}")]
-        public IActionResult Delete(string productId, [FromQuery] string implementer)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = ParticipantsRoleConst.ADMIN)]
+        public IActionResult Delete(string productId)
         {
             var product = productRepository.Get(productId);
             if (product == null)
             {
                 return NotFound();
             }
+            string implementer = GetCurrentUser();
             var result = productRepository.Delete(productId, implementer);
             if (result)
             {
@@ -84,6 +94,13 @@ namespace SneakerShopAPI.Controllers
             }
 
             return BadRequest();
+        }
+        private string GetCurrentUser()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            string participantIdVal = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return participantIdVal;
         }
     }
 }

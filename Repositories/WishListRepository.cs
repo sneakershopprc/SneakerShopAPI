@@ -21,14 +21,14 @@ namespace SneakerShopAPI.Repositories
             productRepository = _productRepository;
 
         }
-        public WishList Get(string productId)
+        public WishList Get(string productId, string username)
         {
-            WishList wishList = context.WishList.SingleOrDefault(s => s.Username == "sonmap" && s.ProductId == productId && s.DelFlg == false);
+            WishList wishList = context.WishList.SingleOrDefault(s => s.Username == username && s.ProductId == productId && s.DelFlg == false);
             return wishList;
         }
-        public WishListVModel GetToVModel(string productId)
+        public WishListVModel GetToVModel(string productId, string username)
         {
-            WishListVModel wishList = context.WishList.Where(s => s.Username == "sonmap" && s.ProductId == productId && s.DelFlg == false)
+            WishListVModel wishList = context.WishList.Where(s => s.Username == username && s.ProductId == productId && s.DelFlg == false)
                 .Select(s => new WishListVModel
                 {
                     Id = s.Id,
@@ -47,10 +47,10 @@ namespace SneakerShopAPI.Repositories
                 }).SingleOrDefault();
             return wishList;
         }
-        public PagedList<WishListVModel> GetAll(ResourceParameters model)
+        public PagedList<WishListVModel> GetAll(ResourceParameters model, string username)
         {
             var query = context.WishList.Where(d => (d.DelFlg == false)
-                        && (d.Username == "sonmap"))
+                        && (d.Username == username))
                     .Select(s => new WishListVModel
                     {
                         Id = s.Id,
@@ -81,21 +81,21 @@ namespace SneakerShopAPI.Repositories
         {
             var wishList = this.mapper.Map<WishList>(model);
             wishList.DelFlg = false;
-            wishList.Username = "sonmap";
-            wishList.InsBy = "sonmap";
+            wishList.Username = model.Username;
+            wishList.InsBy = model.Username;
             wishList.InsDatetime = DateTime.Now;
-            wishList.UpdBy = "sonmap";
+            wishList.UpdBy = model.Username;
             wishList.UpdDatetime = DateTime.Now;
             context.WishList.Add(wishList);
             context.SaveChanges();
             return true;
         }
 
-        public bool Delete(string productId)
+        public bool Delete(string productId, string username)
         {
-            WishList wishList = Get(productId);
+            WishList wishList = Get(productId, username);
             //wishList.DelFlg = true;
-            //wishList.UpdBy = "sonmap";
+            //wishList.UpdBy = username;
             //wishList.UpdDatetime = DateTime.Now;
             context.WishList.Remove(wishList);
             context.SaveChanges();

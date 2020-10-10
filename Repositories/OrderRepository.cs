@@ -130,7 +130,7 @@ namespace SneakerShopAPI.Repositories
         {
             Order order = Get(orderId);
             order.Status = orderVModel.Status;
-            order.UpdBy = "sonmap";
+            order.UpdBy = orderVModel.Username;
             order.UpdDatetime = DateTime.Now;
 
             // gọi cái order

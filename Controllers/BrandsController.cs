@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SneakerShopAPI.Repositories;
 using SneakerShopAPI.ViewModels;
+
+using static ssrcore.Helpers.Constants;
 
 namespace SneakerShopAPI.Controllers
 {
@@ -40,8 +41,10 @@ namespace SneakerShopAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = ParticipantsRoleConst.ADMIN)]
         public IActionResult Create([FromBody] BrandVModel model)
         {
+            model.Implementer = GetCurrentUser();
             var result = brandRepository.Create(model);
             if (result != null)
             {
@@ -52,8 +55,10 @@ namespace SneakerShopAPI.Controllers
         }
 
         [HttpPut("{brandId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = ParticipantsRoleConst.ADMIN)]
         public IActionResult Update(string brandId, [FromBody] BrandVModel model)
         {
+            model.Implementer = GetCurrentUser();
             var brand = brandRepository.Get(brandId);
             if (brand == null)
             {
@@ -70,8 +75,10 @@ namespace SneakerShopAPI.Controllers
         }
 
         [HttpDelete("{brandId}")]
-        public IActionResult Delete(string brandId, [FromQuery] string implementer)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = ParticipantsRoleConst.ADMIN)]
+        public IActionResult Delete(string brandId)
         {
+            string implementer = GetCurrentUser();
             var brand = brandRepository.Get(brandId);
             if (brand == null)
             {
@@ -84,6 +91,14 @@ namespace SneakerShopAPI.Controllers
             }
 
             return BadRequest();
+        }
+
+        private string GetCurrentUser()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            string participantIdVal = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return participantIdVal;
         }
     }
 }

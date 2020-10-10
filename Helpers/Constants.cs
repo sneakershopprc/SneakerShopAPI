@@ -13,6 +13,11 @@ namespace ssrcore.Helpers
             public const int SORT_NAME_ASC = 1;
             public const int SORT_NAME_DES = 2;
         }
+        public struct ParticipantsRoleConst
+        {
+            public const string ADMIN = "admin";
+            public const string CUSTOMER = "customer";
+        }
 
         public struct Status
         {

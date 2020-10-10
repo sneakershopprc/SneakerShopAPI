@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SneakerShopAPI.Models;
 using SneakerShopAPI.Repositories;
+using static ssrcore.Helpers.Constants;
 
 namespace SneakerShopAPI.Controllers
 {
@@ -39,6 +44,7 @@ namespace SneakerShopAPI.Controllers
             return Ok(productDetail);
         }
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = ParticipantsRoleConst.ADMIN)]
         public IActionResult Create([FromBody] ProductDetail model)
         {
             var result = productDetailRepository.Create(model);
@@ -51,6 +57,7 @@ namespace SneakerShopAPI.Controllers
         }
 
         [HttpPut("{Id}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = ParticipantsRoleConst.ADMIN)]
         public IActionResult Update(int Id, [FromBody] ProductDetail model)
         {
             var productDetail = productDetailRepository.Get(Id);

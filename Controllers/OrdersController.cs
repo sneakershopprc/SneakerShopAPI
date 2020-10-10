@@ -1,17 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SneakerShopAPI.Repositories;
 using SneakerShopAPI.ViewModels;
 using ssrcore.ViewModels;
+using static ssrcore.Helpers.Constants;
 
 namespace SneakerShopAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class OrdersController : ControllerBase
     {
         private readonly OrderRepository orderRepository;
@@ -41,8 +46,10 @@ namespace SneakerShopAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = ParticipantsRoleConst.CUSTOMER)]
         public IActionResult Create([FromBody] OrderVModel model)
         {
+            model.Username = GetCurrentUser();
             var result = orderRepository.Create(model);
             if (result != null)
             {
@@ -53,6 +60,7 @@ namespace SneakerShopAPI.Controllers
         }
 
         [HttpPut("{orderId}")]
+        [Authorize(Roles = ParticipantsRoleConst.ADMIN)]
         public IActionResult Update(string orderId, [FromBody] OrderVModel orderVModel)
         {
             var order = orderRepository.Get(orderId);
@@ -63,11 +71,19 @@ namespace SneakerShopAPI.Controllers
 
             if (ModelState.IsValid)
             {
+                orderVModel.Username = GetCurrentUser();
                 var result = orderRepository.Update(orderId, orderVModel);
                 return Ok(result);
             }
 
             return BadRequest();
+        }
+        private string GetCurrentUser()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            string participantIdVal = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return participantIdVal;
         }
     }
 }
