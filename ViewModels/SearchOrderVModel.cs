@@ -8,6 +8,6 @@ namespace SneakerShopAPI.ViewModels
 {
     public class SearchOrderVModel : ResourceParameters
     {
-        public string OrderId { get; set; }
+        public string Username { get; set; }
     }
 }

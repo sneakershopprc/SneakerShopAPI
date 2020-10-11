@@ -48,9 +48,9 @@ namespace SneakerShopAPI.Repositories
             order.OrderDetails = orderDetailRepository.GetAll(orderId);
             return order;
         }
-        public PagedList<OrderVModel> GetAll(ResourceParameters model)
+        public PagedList<OrderVModel> GetAll(SearchOrderVModel model)
         {
-            var query = context.Order
+            var query = context.Order.Where(d => (model.Username == null || d.Username.Equals(model.Username)))
                     .Select(s => new OrderVModel
                     {
                         OrderId = s.OrderId,
@@ -65,13 +65,17 @@ namespace SneakerShopAPI.Repositories
 
             var totalCount = query.Count();
             List<OrderVModel> result = null;
+            if (model.SortBy == Constants.SortBy.SORT_DEFAULT)
+            {
+                query = query.OrderByDescending(t => t.OrderId);
+            }
             result = query.Skip(model.Size * (model.Page - 1))
             .Take(model.Size)
             .ToList();
-            //foreach(OrderVModel orderVModel in result)
-            //{
-            //    orderVModel.OrderDetails = orderDetailRepository.GetAll(orderVModel.OrderId);
-            //}
+            foreach (OrderVModel orderVModel in result)
+            {
+                orderVModel.OrderDetails = orderDetailRepository.GetAll(orderVModel.OrderId);
+            }
             return PagedList<OrderVModel>.ToPagedList(result, totalCount, model.Page, model.Size);
         }
 

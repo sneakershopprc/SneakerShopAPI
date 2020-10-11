@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SneakerShopAPI.Repositories;
 using SneakerShopAPI.ViewModels;
+using ssrcore.Helpers;
 using ssrcore.ViewModels;
 using static ssrcore.Helpers.Constants;
 
@@ -27,8 +28,12 @@ namespace SneakerShopAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllOrder([FromQuery] ResourceParameters model)
+        public IActionResult GetAllOrder([FromQuery] SearchOrderVModel model)
         {
+            if (GetCurrentRole().Equals(ParticipantsRoleConst.CUSTOMER))
+            {
+                model.Username = GetCurrentUser();
+            }
             var result = orderRepository.GetAll(model);
             return Ok(result);
         }
@@ -84,6 +89,14 @@ namespace SneakerShopAPI.Controllers
             string participantIdVal = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             return participantIdVal;
+        }
+
+        private string GetCurrentRole()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            string role = identity.FindFirst(ClaimTypes.Role).Value;
+
+            return role;
         }
     }
 }
