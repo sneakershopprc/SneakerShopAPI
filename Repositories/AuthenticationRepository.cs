@@ -68,6 +68,23 @@ namespace SneakerShopAPI.Repositories
             return null;
         }
 
+        public bool ChangePassword(string username, string newPassword)
+        {
+            var acc = context.Account.Find(username);
+
+            if (acc == null) return false;
+
+            var salt = this.GenSalt();
+            var hashed = this.HashPass(salt, newPassword);
+
+            acc.PasswordHash = hashed;
+            acc.PasswordSalt = salt;
+
+            context.Account.Update(acc);
+            context.SaveChanges();
+            return true;
+        }
+
         private byte[] GenSalt()
         {
             byte[] salt = new byte[128 / 8];

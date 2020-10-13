@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http;
@@ -62,6 +64,31 @@ namespace SneakerShopAPI.Controllers
             }
 
             return Ok(vmodel);
+        }
+
+        [HttpPost("change-password")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public ActionResult ChangePassword([FromBody] AccountVModel account)
+        {
+            var username = this.GetCurrentUser();
+            if ((account?.Password ?? "").Length < 6)
+            {
+                return BadRequest("Password is wrong format");
+            }
+
+            if (repository.ChangePassword(username, account.Password))
+            {
+                return Ok();
+            }
+            return BadRequest("Cannot change password");
+        }
+
+        private string GetCurrentUser()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            string participantIdVal = identity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            return participantIdVal;
         }
     }
 }

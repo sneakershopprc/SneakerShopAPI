@@ -45,6 +45,7 @@ namespace SneakerShopAPI
             services.AddScoped<WishListRepository>();
             services.AddScoped<OrderRepository>();
             services.AddScoped<OrderDetailRepository>();
+            services.AddScoped<AccountRepository>();
 
             services.AddCors(options =>
             {
