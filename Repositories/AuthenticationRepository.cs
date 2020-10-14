@@ -55,7 +55,7 @@ namespace SneakerShopAPI.Repositories
 
             Account curAcc = context.Account.Find(username);
 
-            if (curAcc == null) return null;
+            if (curAcc == null || curAcc.DelFlg.Value) return null;
 
             byte[] CurHashedPass = this.HashPass(curAcc.PasswordSalt, password);
 
