@@ -54,8 +54,8 @@ namespace SneakerShopAPI
                     builder =>
                     {
                         builder.WithOrigins("http://localhost:8080", 
-                            "https://5f8eb4a0970e1d000881ea95--loving-thompson-5c5190.netlify.app/",
-                            "https://jolly-feynman-3a1c1b.netlify.app/")
+                            "https://5f8eb4a0970e1d000881ea95--loving-thompson-5c5190.netlify.app",
+                            "https://jolly-feynman-3a1c1b.netlify.app")
                         .AllowCredentials()
                         .AllowAnyMethod()
                         .AllowAnyHeader();
