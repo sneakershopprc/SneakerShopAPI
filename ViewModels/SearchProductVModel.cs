@@ -14,6 +14,5 @@ namespace SneakerShopAPI.ViewModels
         public List<String> BrandList { get; set; }
         public string BrandNm { get; set; }
         public int isStill { get; set; }
-
     }
 }

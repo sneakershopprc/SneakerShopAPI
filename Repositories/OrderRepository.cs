@@ -67,7 +67,7 @@ namespace SneakerShopAPI.Repositories
             List<OrderVModel> result = null;
             if (model.SortBy == Constants.SortBy.SORT_DEFAULT)
             {
-                query = query.OrderByDescending(t => t.OrderId);
+                query = query.OrderByDescending(t => t.UpdDatetime);
             }
             result = query.Skip(model.Size * (model.Page - 1))
             .Take(model.Size)

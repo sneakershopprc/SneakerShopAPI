@@ -11,5 +11,7 @@ namespace SneakerShopAPI.ViewModels
         public string ProductId { get; set; }
         public ProductVModel Product { get; set; }
         public string Username { get; set; }
+        public DateTime InsDatetime { get; set; }
+        public DateTime UpdDatetime { get; set; }
     }
 }

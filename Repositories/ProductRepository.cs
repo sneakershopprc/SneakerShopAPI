@@ -42,7 +42,9 @@ namespace SneakerShopAPI.Repositories
                 Price = s.ProductDetail.Count > 0 ? s.ProductDetail.Min(t => t.Price) : 0,
                 Discount = s.Discount,
                 photoList = s.PhotoProduct.Where(d => d.DelFlg == false).Select(p => p.Photo).ToList(),
-                productDetailList = isStill == 1 ? s.ProductDetail.Where(pd => pd.Quantity > 0).ToList() : s.ProductDetail.ToList()
+                productDetailList = isStill == 1 ? s.ProductDetail.Where(pd => pd.Quantity > 0).ToList() : s.ProductDetail.ToList(),
+                InsDatetime = s.InsDatetime,
+                UpdDatetime = s.UpdDatetime
             }).SingleOrDefault();
             return productModel;
         }
@@ -66,6 +68,8 @@ namespace SneakerShopAPI.Repositories
                         Price = s.ProductDetail.Count > 0 ? s.ProductDetail.Min(t => t.Price) : 0,
                         Discount = s.Discount,
                         photoList = s.PhotoProduct.Where(d => d.DelFlg == false).Select(p => p.Photo).ToList(),
+                        InsDatetime = s.InsDatetime,
+                        UpdDatetime = s.UpdDatetime
                         //productDetailList = model.isStill == 1 ? s.ProductDetail.Where(pd => pd.Quantity > 0).ToList() : s.ProductDetail.ToList()
                     }); 
 
@@ -73,7 +77,7 @@ namespace SneakerShopAPI.Repositories
             List<ProductVModel> result = null;
             if (model.SortBy == Constants.SortBy.SORT_DEFAULT)
             {
-                query = query.OrderBy(t => t.ProductNm);
+                query = query.OrderByDescending(t => t.UpdDatetime);
             }
             else  if (model.SortBy == Constants.SortBy.SORT_NAME_ASC)
             {

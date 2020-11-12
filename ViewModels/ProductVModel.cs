@@ -20,6 +20,8 @@ namespace SneakerShopAPI.ViewModels
         public List<ProductDetail> productDetailList { get; set; }
         public int isStill { get; set; }
         public string Implementer { get; set; }
+        public DateTime InsDatetime { get; set; }
+        public DateTime UpdDatetime { get; set; }
 
     }
 }

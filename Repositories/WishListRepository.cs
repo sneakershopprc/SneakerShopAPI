@@ -42,8 +42,10 @@ namespace SneakerShopAPI.Repositories
                         BrandNm = s.Product.Brand.BrandNm,
                         Price = s.Product.ProductDetail.Count > 0 ? s.Product.ProductDetail.Min(t => t.Price) : 0,
                         Discount = s.Product.Discount,
-                        photoList = s.Product.PhotoProduct.Where(d => d.DelFlg == false).Select(p => p.Photo).ToList(),
-                    }
+                        photoList = s.Product.PhotoProduct.Where(d => d.DelFlg == false).Select(p => p.Photo).ToList()
+                    },
+                    InsDatetime = s.InsDatetime,
+                    UpdDatetime = s.UpdDatetime
                 }).SingleOrDefault();
             return wishList;
         }
@@ -65,9 +67,12 @@ namespace SneakerShopAPI.Repositories
                             Price = s.Product.ProductDetail.Count > 0 ? s.Product.ProductDetail.Min(t => t.Price) : 0,
                             Discount = s.Product.Discount,
                             photoList = s.Product.PhotoProduct.Where(d => d.DelFlg == false).Select(p => p.Photo).ToList(),
-                        }
+                        },
+                        InsDatetime = s.InsDatetime,
+                        UpdDatetime = s.UpdDatetime
                     }
                     );
+            query = query.OrderByDescending(t => t.UpdDatetime);
             var totalCount = query.Count();
             List<WishListVModel> result = null;
             result = query.Skip(model.Size * (model.Page - 1))
