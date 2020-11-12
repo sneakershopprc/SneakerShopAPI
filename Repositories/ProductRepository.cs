@@ -71,15 +71,13 @@ namespace SneakerShopAPI.Repositories
                         InsDatetime = s.InsDatetime,
                         UpdDatetime = s.UpdDatetime
                         //productDetailList = model.isStill == 1 ? s.ProductDetail.Where(pd => pd.Quantity > 0).ToList() : s.ProductDetail.ToList()
-                    }); 
-
-            var totalCount = query.Count();
+                    });
             List<ProductVModel> result = null;
             if (model.SortBy == Constants.SortBy.SORT_DEFAULT)
             {
                 query = query.OrderByDescending(t => t.UpdDatetime);
             }
-            else  if (model.SortBy == Constants.SortBy.SORT_NAME_ASC)
+            else if (model.SortBy == Constants.SortBy.SORT_NAME_ASC)
             {
                 query = query.OrderBy(t => t.Price);
             }
@@ -87,7 +85,10 @@ namespace SneakerShopAPI.Repositories
             {
                 query = query.OrderByDescending(t => t.Price);
             }
-            result = query.Skip(model.Size * (model.Page - 1))
+            result = query.ToList();
+            result = result.Where(s => s.Price <= model.MaxPrice && s.Price >= model.MinPrice).ToList(); 
+            var totalCount = result.Count();
+            result = result.Skip(model.Size * (model.Page - 1))
             .Take(model.Size)
             .ToList();
             return PagedList<ProductVModel>.ToPagedList(result, totalCount, model.Page, model.Size);
